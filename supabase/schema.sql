@@ -99,3 +99,10 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
+
+-- Backfill: accounts created BEFORE this schema was applied have no business
+-- profile (the trigger only fires for new signups). Safe to rerun — the
+-- conflict clause skips users who already have one.
+insert into public.businesses (user_id, name)
+select id, 'My Business' from auth.users
+on conflict (user_id) do nothing;
