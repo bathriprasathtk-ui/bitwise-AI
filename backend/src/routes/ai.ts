@@ -72,12 +72,15 @@ Gross margin ${metrics!.grossMarginPct.toFixed(1)}%, Net margin ${metrics!.netMa
 Health score ${metrics!.healthScore}/100 (${metrics!.healthLabel}).`
     : `No financial data has been entered yet for ${business.name}.`;
 
-  const { data: history } = await supabaseAdmin
+  // Most recent 20 messages (descending + reverse) — a plain ascending limit
+  // would hand the model the *oldest* slice of a long conversation.
+  const { data: recentHistory } = await supabaseAdmin
     .from("chat_messages")
     .select("*")
     .eq("business_id", business.id)
-    .order("created_at", { ascending: true })
+    .order("created_at", { ascending: false })
     .limit(20);
+  const history = (recentHistory ?? []).reverse();
 
   const conversation = [
     ...(history ?? []).map((m) => ({ role: m.role as "user" | "assistant", content: m.content })),
