@@ -55,30 +55,30 @@ alter table public.chat_messages enable row level security;
 
 drop policy if exists "own businesses" on public.businesses;
 create policy "own businesses" on public.businesses
-  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+  for all using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
 
 drop policy if exists "own financial entries" on public.financial_entries;
 create policy "own financial entries" on public.financial_entries
   for all using (
-    exists (select 1 from public.businesses b where b.id = business_id and b.user_id = auth.uid())
+    exists (select 1 from public.businesses b where b.id = business_id and b.user_id = (select auth.uid()))
   ) with check (
-    exists (select 1 from public.businesses b where b.id = business_id and b.user_id = auth.uid())
+    exists (select 1 from public.businesses b where b.id = business_id and b.user_id = (select auth.uid()))
   );
 
 drop policy if exists "own simulations" on public.simulations;
 create policy "own simulations" on public.simulations
   for all using (
-    exists (select 1 from public.businesses b where b.id = business_id and b.user_id = auth.uid())
+    exists (select 1 from public.businesses b where b.id = business_id and b.user_id = (select auth.uid()))
   ) with check (
-    exists (select 1 from public.businesses b where b.id = business_id and b.user_id = auth.uid())
+    exists (select 1 from public.businesses b where b.id = business_id and b.user_id = (select auth.uid()))
   );
 
 drop policy if exists "own chat messages" on public.chat_messages;
 create policy "own chat messages" on public.chat_messages
   for all using (
-    exists (select 1 from public.businesses b where b.id = business_id and b.user_id = auth.uid())
+    exists (select 1 from public.businesses b where b.id = business_id and b.user_id = (select auth.uid()))
   ) with check (
-    exists (select 1 from public.businesses b where b.id = business_id and b.user_id = auth.uid())
+    exists (select 1 from public.businesses b where b.id = business_id and b.user_id = (select auth.uid()))
   );
 
 -- Auto-create a business profile the moment a user signs up
