@@ -28,6 +28,7 @@ export function AIAdvisor() {
     api
       .getChatHistory()
       .then((res) => setMessages(res.messages))
+      .catch((e: unknown) => setError(e instanceof Error ? e.message : "Couldn't load your conversation."))
       .finally(() => setLoading(false));
   }, []);
 
@@ -73,7 +74,7 @@ export function AIAdvisor() {
                 <button
                   key={s}
                   onClick={() => send(s)}
-                  className="rounded-full border border-border px-3 py-1.5 text-xs text-ink hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
+                  className="min-h-11 rounded-full border border-border px-3 py-1.5 text-xs text-ink hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
                 >
                   {s}
                 </button>
@@ -119,6 +120,7 @@ export function AIAdvisor() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask your AI business advisor…"
+          aria-label="Message for AI advisor"
           className="h-11 flex-1 rounded-lg border border-border bg-white px-4 text-sm text-ink placeholder:text-ink-secondary focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:bg-[#0F1729] dark:border-slate-700 dark:text-slate-100"
         />
         <Button type="submit" disabled={sending || !input.trim()} aria-label="Send message">
