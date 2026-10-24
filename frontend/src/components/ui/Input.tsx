@@ -23,5 +23,5 @@ export function Label({ className, ...props }: React.LabelHTMLAttributes<HTMLLab
 
 export function FieldError({ message }: { message?: string }) {
   if (!message) return null;
-  return <p className="mt-1 text-sm text-danger">{message}</p>;
+  return <p className="mt-1 text-sm text-danger" role="alert">{message}</p>;
 }
