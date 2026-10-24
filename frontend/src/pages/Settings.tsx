@@ -159,7 +159,9 @@ export function Settings() {
             <div className="flex items-center justify-between">
               <span className="text-sm text-ink dark:text-slate-200">Dark mode</span>
               <button
+                type="button"
                 role="switch"
+                aria-label="Toggle dark mode"
                 aria-checked={dark}
                 onClick={() => setDark((d) => !d)}
                 className={`h-6 w-11 rounded-full transition-colors ${dark ? "bg-primary" : "bg-slate-300"}`}
