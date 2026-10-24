@@ -65,21 +65,32 @@ one-line config change, not a rewrite.
   health score recalculated live, with an optional AI-written summary of the scenario
 - Responsive sidebar-on-desktop / bottom-nav-on-mobile layout, dark mode
 
-## What you still need to do
+## Deploy on Vercel
 
-- Run `npm install` in both folders (this container has no network access, so
-  dependencies aren't pre-installed or verified against a live Supabase project)
-- Fill in your real Supabase + AI keys in both `.env` files
-- Deploy (e.g. frontend on Vercel, backend on Render/Fly/Railway) and set
-  `VITE_API_BASE_URL` to your deployed backend URL
+Deploy this monorepo as **two Vercel projects** from the same GitHub repository.
 
-## Before deployment
+1. **Backend first**
+   - Import this repository and set **Root Directory** to `backend`.
+   - Leave the framework preset as **Other**.
+   - Vercel serves the Express API through `api/[...path].ts`.
+   - Add these environment variables:
+     `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `AI_PROVIDER`,
+     `AI_API_KEY`, and `CORS_ORIGIN`.
+   - Deploy, then copy the backend's HTTPS URL.
 
-- Set the Supabase Auth **Site URL** and allowed redirect URLs for your deployed
-  frontend URL. This is required for email confirmation and password reset links.
-- Configure the backend's `CORS_ORIGIN` to the exact deployed frontend URL, and
-  configure the frontend's `VITE_API_BASE_URL` to the backend's HTTPS URL.
-- Keep `SUPABASE_SERVICE_ROLE_KEY` and `AI_API_KEY` only in the backend host's
-  secret manager. Do not add them to the frontend environment or commit a `.env` file.
-- The schema is safe to rerun for its policies and auth trigger. Run it before
-  creating production users so every account receives its business profile.
+2. **Frontend**
+   - Create a second Vercel project from the same repository with **Root Directory**
+     set to `frontend` and framework preset **Vite**.
+   - Add `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and
+     `VITE_API_BASE_URL` (the backend HTTPS URL from the first deployment).
+   - Deploy. The included `vercel.json` preserves React routes on refresh.
+
+3. **Finish Supabase Auth**
+   - In Supabase Authentication URL settings, set **Site URL** to the frontend HTTPS
+     URL and add it to **Redirect URLs**. This is required for email confirmation
+     and password reset links.
+   - Change the backend's `CORS_ORIGIN` to that exact frontend URL, then redeploy
+     the backend.
+
+Keep `SUPABASE_SERVICE_ROLE_KEY` and `AI_API_KEY` only in Vercel's backend
+environment settings. Never put either value in the frontend or commit a `.env` file.
