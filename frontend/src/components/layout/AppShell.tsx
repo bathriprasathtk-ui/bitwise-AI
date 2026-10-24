@@ -21,8 +21,8 @@ const NAV_ITEMS = [
   { to: "/app/settings", label: "Settings", icon: SettingsIcon },
 ];
 
-// Mobile only shows the primary 5 — Settings lives behind a menu tap on Dashboard on small screens
-const MOBILE_ITEMS = NAV_ITEMS.slice(0, 5);
+// Keep every destination available on mobile; the bar scrolls on very narrow screens.
+const MOBILE_ITEMS = NAV_ITEMS;
 
 export function AppShell() {
   const { signOut, user } = useAuth();
@@ -96,7 +96,7 @@ export function AppShell() {
               to={item.to}
               className={({ isActive }) =>
                 cn(
-                  "flex flex-1 flex-col items-center gap-1 py-2.5 text-[11px] font-medium",
+                  "flex min-h-11 min-w-16 flex-1 flex-col items-center justify-center gap-1 px-1 py-2 text-[11px] font-medium",
                   isActive ? "text-primary" : "text-ink-secondary dark:text-slate-500"
                 )
               }
