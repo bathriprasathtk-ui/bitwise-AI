@@ -8,12 +8,14 @@ import { Button } from "../components/ui/Button";
 import { Label } from "../components/ui/Input";
 
 function Slider({
+  id,
   label,
   value,
   onChange,
   min = -50,
   max = 50,
 }: {
+  id: string;
   label: string;
   value: number;
   onChange: (v: number) => void;
@@ -23,10 +25,11 @@ function Slider({
   return (
     <div>
       <div className="mb-1.5 flex items-center justify-between">
-        <Label className="mb-0">{label}</Label>
+        <Label htmlFor={id} className="mb-0">{label}</Label>
         <span className="text-sm font-semibold text-primary">{formatPct(value)}</span>
       </div>
       <input
+        id={id}
         type="range"
         min={min}
         max={max}
@@ -100,10 +103,10 @@ export function Simulator() {
             <CardTitle>Scenario inputs</CardTitle>
           </CardHeader>
 
-          <Slider label="Price change" value={priceChangePct} onChange={setPriceChangePct} />
-          <Slider label="Sales volume change" value={volumeChangePct} onChange={setVolumeChangePct} />
-          <Slider label="Cost of goods change" value={costChangePct} onChange={setCostChangePct} />
-          <Slider label="Operating expense change" value={expenseChangePct} onChange={setExpenseChangePct} />
+          <Slider id="price-change" label="Price change" value={priceChangePct} onChange={setPriceChangePct} />
+          <Slider id="volume-change" label="Sales volume change" value={volumeChangePct} onChange={setVolumeChangePct} />
+          <Slider id="cost-change" label="Cost of goods change" value={costChangePct} onChange={setCostChangePct} />
+          <Slider id="expense-change" label="Operating expense change" value={expenseChangePct} onChange={setExpenseChangePct} />
 
           <div className="rounded-lg border border-border p-3 dark:border-slate-800">
             <label className="flex items-center gap-2 text-sm font-medium text-ink dark:text-slate-100">
